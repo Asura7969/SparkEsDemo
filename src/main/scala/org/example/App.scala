@@ -9,13 +9,12 @@ import org.elasticsearch.spark.rdd.EsSpark
 object App {
 
   def main(args: Array[String]): Unit = {
-
     val conf = new SparkConf()
       .set("es.nodes", args(0))
       .set("es.port", "9200")
       .set("es.net.http.auth.user","elastic")
-      .set("es.net.http.auth.pass", "1122334")
-      .set("es.nodes.wan.only", args(1))
+      .set("es.net.http.auth.pass", args(1))
+      .set("es.nodes.wan.only", args(2))
 
     val esQuery =
       """
@@ -28,6 +27,7 @@ object App {
     val spark: SparkSession = SparkSession.builder()
       .config(conf)
       .appName("spark-es-demo")
+      .master("local[*]")
       .getOrCreate()
 
     val sc = spark.sparkContext
